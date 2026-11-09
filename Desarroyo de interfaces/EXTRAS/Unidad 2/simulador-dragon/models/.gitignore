@@ -1,0 +1,10 @@
+# Modelo del dragón de 3DHaupt (CGTrader).
+# Su licencia no permite redistribuir los archivos, así que no se sube al repositorio.
+# Sin esta carpeta, el simulador usa el dragón hecho con figuras (js/dragon.js).
+models/dragon/
+
+# Archivos del sistema y del editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/

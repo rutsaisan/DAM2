@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Cuaderno del Jinete · Simulador de montar un dragón</title>
+
+  <!-- Fuentes con aspecto de escrito a mano -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/estilos.css">
+
+  <!-- three.js se carga desde internet con un import map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ============ PANTALLA DE INICIO ============ -->
+  <div id="inicio" class="inicio">
+    <div class="inicio-tarjeta papel">
+      <h1>El Cuaderno del Jinete</h1>
+      <p class="subtitulo">Simulador para aprender a montar un dragón paso a paso</p>
+      <p>Sigue las instrucciones del cuaderno y controla el simulador <strong>con gestos de la mano</strong> delante de la cámara.</p>
+      <div class="inicio-botones">
+        <button id="btnCamara" class="boton-tinta">✋ Jugar con la cámara</button>
+        <button id="btnTeclado" class="boton-tinta secundario">⌨️ Jugar con teclado y ratón</button>
+      </div>
+      <p id="estadoCarga" class="estado-carga" aria-live="polite"></p>
+      <p class="nota-pequena">La cámara necesita abrir la página con un servidor local (Live Server o <code>python -m http.server</code>) en Chrome o Edge.</p>
+    </div>
+  </div>
+
+  <main class="app">
+    <!-- ============ LIBRETA (interfaz gráfica) ============ -->
+    <section class="libreta" aria-label="Cuaderno con los pasos">
+      <div class="lomo" aria-hidden="true"></div>
+      <div class="hojas">
+        <article id="pagina" class="pagina papel">
+          <!-- libreta.js rellena esta página -->
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ SIMULADOR 3D ============ -->
+    <section class="simulador" id="simulador">
+      <canvas id="lienzo3d"></canvas>
+
+      <!-- Indicador del paso actual -->
+      <div class="hud hud-paso" id="hudPaso">Portada</div>
+
+      <!-- Datos de vuelo -->
+      <div class="hud hud-vuelo oculto" id="hudVuelo">
+        <div class="brujula"><span id="flecha">➤</span></div>
+        <div>
+          <div>Altura: <strong id="datoAltura">0</strong> m</div>
+          <div id="datoObjetivo">Aros: 0 / 3</div>
+        </div>
+      </div>
+
+      <!-- Gesto detectado -->
+      <div class="hud hud-gesto" id="hudGesto">
+        <span class="gesto-icono" id="gestoIcono">·</span>
+        <div>
+          <div class="gesto-nombre" id="gestoNombre">Sin mano</div>
+          <div class="barra-confianza"><div id="barraConfianza"></div></div>
+        </div>
+      </div>
+
+      <!-- Vista de la cámara con los puntos de la mano -->
+      <div class="camara oculto" id="cajaCamara">
+        <video id="video" playsinline muted></video>
+        <canvas id="lienzoMano"></canvas>
+      </div>
+
+      <!-- Ayuda del modo teclado -->
+      <div class="hud hud-teclado oculto" id="hudTeclado">
+        Mantén pulsada una tecla para hacer el gesto y mueve el ratón como si fuera tu mano:<br>
+        <kbd>1</kbd> ✋ <kbd>2</kbd> ✊ <kbd>3</kbd> ☝️ <kbd>4</kbd> 👍 <kbd>5</kbd> 👎 <kbd>6</kbd> ✌️
+      </div>
+
+      <!-- Mensajes cortos -->
+      <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+      <!-- Botones -->
+      <div class="controles">
+        <button id="btnSonido" class="boton-mini" aria-pressed="true" title="Activar o quitar los sonidos">🔔 Sonido</button>
+        <button id="btnVoz" class="boton-mini" aria-pressed="false" title="Leer los pasos en voz alta">🔈 Voz</button>
+        <button id="btnReiniciar" class="boton-mini" title="Volver a empezar">↺ Reiniciar</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

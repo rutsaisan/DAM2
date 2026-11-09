@@ -1,0 +1,381 @@
+/* =========================================================
+   El Cuaderno del Jinete - estilos
+   Aspecto de cuaderno viejo: papel amarillento, tinta marrón,
+   letra escrita a mano y tapas de cuero.
+   ========================================================= */
+
+:root {
+  --papel: #ead9b2;
+  --papel-oscuro: #d6bf8e;
+  --tinta: #3b2614;
+  --tinta-suave: #6b4a2b;
+  --rojo-tinta: #8c2a1c;
+  --cuero: #4a2c17;
+  --cuero-claro: #6e4426;
+  --letra-mano: 'Caveat', 'Segoe Print', cursive;
+  --letra-titulo: 'IM Fell English SC', Georgia, serif;
+  --letra-texto: 'IM Fell English', Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #1d140c;
+  color: var(--tinta);
+  font-family: var(--letra-texto);
+}
+
+button { font: inherit; cursor: pointer; }
+.oculto { display: none !important; }
+
+/* ---------- Papel envejecido (se reutiliza) ---------- */
+.papel {
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(120, 80, 30, .18), transparent 40%),
+    radial-gradient(ellipse at 85% 75%, rgba(120, 80, 30, .22), transparent 45%),
+    radial-gradient(circle at 70% 15%, rgba(90, 55, 20, .12), transparent 18%),
+    repeating-linear-gradient(to bottom, transparent 0 33px, rgba(80, 60, 30, .13) 33px 34px),
+    linear-gradient(135deg, var(--papel) 0%, #e3cc9b 60%, var(--papel-oscuro) 100%);
+  box-shadow:
+    inset 0 0 60px rgba(90, 55, 20, .45),
+    inset 0 0 8px rgba(60, 35, 10, .5);
+}
+
+/* ---------- Estructura general ---------- */
+.app {
+  display: grid;
+  grid-template-columns: minmax(340px, 38%) 1fr;
+  height: 100vh;
+}
+
+/* ---------- Libreta ---------- */
+.libreta {
+  position: relative;
+  display: flex;
+  padding: 18px 10px 18px 18px;
+  background:
+    repeating-linear-gradient(45deg, rgba(0,0,0,.06) 0 2px, transparent 2px 6px),
+    linear-gradient(160deg, var(--cuero-claro), var(--cuero));
+  perspective: 1800px;
+}
+
+.lomo {
+  width: 26px;
+  margin-right: -4px;
+  border-radius: 6px 0 0 6px;
+  background: linear-gradient(90deg, #2d1a0c, #5a361c 60%, #2d1a0c);
+  border-right: 2px dashed rgba(234, 217, 178, .45);   /* costura */
+  z-index: 2;
+}
+
+.hojas {
+  position: relative;
+  flex: 1;
+  transform-style: preserve-3d;
+}
+
+.pagina {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: 26px 30px 30px 40px;
+  border-radius: 2px 10px 10px 2px;
+  line-height: 34px;           /* coincide con las líneas del papel */
+  scrollbar-width: thin;
+  scrollbar-color: var(--tinta-suave) transparent;
+}
+
+/* margen rojo de cuaderno */
+.pagina::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 28px;
+  width: 1px;
+  background: rgba(140, 42, 28, .35);
+}
+
+/* Copia de la hoja que se gira al pasar de página */
+.hoja-girando {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  animation: girarHoja .9s ease-in forwards;
+  backface-visibility: hidden;
+  z-index: 5;
+  pointer-events: none;
+}
+@keyframes girarHoja {
+  0%   { transform: rotateY(0deg);    filter: brightness(1); }
+  100% { transform: rotateY(-115deg); filter: brightness(.55); opacity: 0; }
+}
+
+.cabecera-pagina {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--letra-mano);
+  font-size: 1.3rem;
+  color: var(--tinta-suave);
+}
+
+.pagina h2 {
+  margin: 4px 0 0;
+  font-family: var(--letra-titulo);
+  font-weight: normal;
+  font-size: 2.1rem;
+  line-height: 1.1;
+  color: var(--rojo-tinta);
+}
+
+.notas {
+  font-family: var(--letra-mano);
+  font-size: 1.45rem;
+  margin: 8px 0;
+}
+.notas p { margin: 0; }
+.notas .tachado { text-decoration: line-through; opacity: .6; }
+
+/* Recuadro del gesto: parece un dibujo pegado en el cuaderno */
+.boceto {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 14px 0;
+  padding: 10px 14px;
+  border: 2px dashed var(--tinta-suave);
+  border-radius: 14px 8px 16px 6px;
+  background: rgba(255, 248, 225, .35);
+  transform: rotate(-1deg);
+  line-height: 1.3;
+}
+.boceto .icono {
+  font-size: 3.6rem;
+  filter: sepia(1) saturate(1.6) hue-rotate(-12deg) contrast(1.1);
+}
+.boceto .como {
+  font-family: var(--letra-mano);
+  font-size: 1.35rem;
+}
+
+.truco {
+  font-family: var(--letra-mano);
+  font-size: 1.25rem;
+  color: var(--rojo-tinta);
+  line-height: 1.3;
+  margin: 6px 0 12px;
+}
+.truco::before { content: "✎ "; }
+
+/* Barra de progreso dibujada con tinta */
+.progreso {
+  position: relative;
+  height: 16px;
+  margin: 10px 0 4px;
+  border: 2px solid var(--tinta);
+  border-radius: 9px 6px 8px 5px;
+  overflow: hidden;
+}
+.progreso > div {
+  height: 100%;
+  width: 0%;
+  background: repeating-linear-gradient(-45deg, var(--tinta-suave) 0 6px, var(--tinta) 6px 12px);
+  transition: width .15s linear;
+}
+
+/* Lista de comprobación de todos los pasos */
+.lista-jinete {
+  margin-top: 16px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(59, 38, 20, .3);
+  font-family: var(--letra-mano);
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+.lista-jinete h3 {
+  margin: 0;
+  font-family: var(--letra-titulo);
+  font-weight: normal;
+  font-size: 1.1rem;
+}
+.lista-jinete ol { margin: 0; padding-left: 22px; }
+.lista-jinete li.hecho { text-decoration: line-through; opacity: .55; }
+.lista-jinete li.actual { color: var(--rojo-tinta); font-weight: 700; }
+
+/* Sello de "conseguido" */
+.sello {
+  position: absolute;
+  top: 70px;
+  right: 26px;
+  padding: 4px 14px;
+  border: 4px double var(--rojo-tinta);
+  border-radius: 8px;
+  color: var(--rojo-tinta);
+  font-family: var(--letra-titulo);
+  font-size: 1.6rem;
+  transform: rotate(14deg) scale(2.2);
+  opacity: 0;
+  pointer-events: none;
+}
+.sello.visible { animation: sellar .45s cubic-bezier(.3, 1.6, .5, 1) forwards; }
+@keyframes sellar {
+  to { transform: rotate(14deg) scale(1); opacity: .85; }
+}
+
+.boton-tinta {
+  padding: 8px 18px;
+  border: 2px solid var(--tinta);
+  border-radius: 12px 6px 10px 5px;
+  background: rgba(255, 248, 225, .5);
+  color: var(--tinta);
+  font-family: var(--letra-mano);
+  font-size: 1.4rem;
+  transition: transform .1s, background .2s;
+}
+.boton-tinta:hover { background: rgba(255, 248, 225, .9); transform: rotate(-1deg); }
+.boton-tinta.secundario { border-style: dashed; }
+
+/* ---------- Simulador ---------- */
+.simulador {
+  position: relative;
+  overflow: hidden;
+}
+#lienzo3d { display: block; width: 100%; height: 100%; }
+
+.hud {
+  position: absolute;
+  padding: 6px 12px;
+  border: 2px solid var(--tinta);
+  border-radius: 10px 5px 9px 4px;
+  background: rgba(234, 217, 178, .92);
+  font-family: var(--letra-mano);
+  font-size: 1.3rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .35);
+}
+.hud-paso { top: 14px; left: 14px; }
+
+.hud-gesto {
+  bottom: 14px; left: 14px;
+  display: flex; align-items: center; gap: 10px;
+  min-width: 200px;
+}
+.gesto-icono { font-size: 2.2rem; line-height: 1; }
+.gesto-nombre { line-height: 1.1; }
+.barra-confianza { width: 120px; height: 6px; border: 1px solid var(--tinta); border-radius: 3px; }
+.barra-confianza > div { height: 100%; width: 0; background: var(--tinta-suave); }
+
+.hud-vuelo {
+  top: 64px; left: 14px;
+  display: flex; align-items: center; gap: 12px;
+  line-height: 1.2;
+}
+.brujula {
+  width: 46px; height: 46px;
+  display: grid; place-items: center;
+  border: 2px solid var(--tinta);
+  border-radius: 50%;
+  font-size: 1.5rem;
+}
+#flecha { display: inline-block; transition: transform .1s linear; color: var(--rojo-tinta); }
+
+.hud-teclado {
+  bottom: 14px; left: 50%;
+  transform: translateX(-50%);
+  max-width: 470px;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  text-align: center;
+}
+kbd {
+  padding: 0 6px;
+  border: 1px solid var(--tinta);
+  border-radius: 4px;
+  background: #fff6dc;
+  font-family: monospace;
+  font-size: .95rem;
+}
+
+.camara {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 240px;
+  aspect-ratio: 4 / 3;
+  border: 3px solid var(--cuero);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .45);
+  background: #000;
+}
+.camara video, .camara canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);       /* efecto espejo */
+}
+
+.aviso {
+  position: absolute;
+  top: 40%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-2deg);
+  padding: 10px 22px;
+  border: 2px solid var(--rojo-tinta);
+  border-radius: 12px;
+  background: rgba(234, 217, 178, .95);
+  color: var(--rojo-tinta);
+  font-family: var(--letra-mano);
+  font-size: 1.8rem;
+  text-align: center;
+  opacity: 0;
+  transition: opacity .3s;
+  pointer-events: none;
+}
+.aviso.visible { opacity: 1; }
+
+.controles {
+  position: absolute;
+  bottom: 14px; right: 14px;
+  display: flex; gap: 8px;
+}
+.boton-mini {
+  padding: 4px 12px;
+  border: 2px solid var(--tinta);
+  border-radius: 8px;
+  background: rgba(234, 217, 178, .92);
+  font-family: var(--letra-mano);
+  font-size: 1.2rem;
+}
+.boton-mini[aria-pressed="true"] { background: var(--tinta-suave); color: var(--papel); }
+
+/* ---------- Pantalla de inicio ---------- */
+.inicio {
+  position: fixed; inset: 0;
+  z-index: 50;
+  display: grid; place-items: center;
+  background: rgba(20, 12, 5, .82);
+}
+.inicio-tarjeta {
+  max-width: 560px;
+  padding: 30px 40px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+.inicio-tarjeta h1 {
+  margin: 0;
+  font-family: var(--letra-titulo);
+  font-weight: normal;
+  font-size: 2.6rem;
+  color: var(--rojo-tinta);
+}
+.subtitulo { font-family: var(--letra-mano); font-size: 1.5rem; margin-top: 0; }
+.inicio-botones { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 18px 0 6px; }
+.estado-carga { min-height: 1.5em; font-family: var(--letra-mano); font-size: 1.3rem; color: var(--rojo-tinta); }
+.nota-pequena { font-size: .9rem; color: var(--tinta-suave); }
+
+/* ---------- Pantallas estrechas ---------- */
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; grid-template-rows: 45% 55%; }
+  .camara { width: 160px; }
+}
